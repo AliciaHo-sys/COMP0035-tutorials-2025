@@ -1,4 +1,5 @@
-
+""""
+# Different hierachies
 def main():
     from importlib import resources
 
@@ -11,8 +12,8 @@ if __name__ == "__main__":
     main()
 
 """
-alternate method
-
+#alternate method    
+import pandas as pd
 from pathlib import Path
 def main():
     # This script is located in the project root, so find the path to the current file and then go to the parent of that file
@@ -24,5 +25,10 @@ def main():
 
     # Check if the file exists, this will print 'true' if it exists
     print(csv_file.exists())
-   #C:\Users\Alici\OneDrive\Desktop\COMP0035 - Application of Software Engineering\COMP0035-tutorials-2025\src\activities\data\paralympics_raw.csv
-"""
+
+    
+    read_file = pd.read_(csv_file, sheet_name= 1)
+    
+   
+if __name__ == "__main__":
+    main()
