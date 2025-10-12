@@ -12,9 +12,11 @@ if __name__ == "__main__":
     main()
 
 """
+
 #alternate method    
 import pandas as pd
 from pathlib import Path
+import matplotlib.pyplot as plt
 def main():
     # This script is located in the project root, so find the path to the current file and then go to the parent of that file
     project_root = Path(__file__).parent.parent
@@ -25,9 +27,13 @@ def main():
 
     # Check if the file exists, this will print 'true' if it exists
     print(csv_file.exists())
+    events_csv_df = pd.read_csv(csv_file)
 
     
-    read_file = pd.read_(csv_file, sheet_name= 1)
+    #read_file = pd.read_csv(csv_file, sheet_name= 1)
+
+    events_csv_df.boxplot()
+    plt.show()
     
    
 if __name__ == "__main__":

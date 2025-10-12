@@ -1,5 +1,6 @@
 import pandas as pd
 from pathlib import Path
+import matplotlib.pyplot as plt
 """"
 def read():
 
@@ -62,15 +63,59 @@ def describe(xlsx_file):
     if (include='object'), print count, unique( no of no-null entries), top (most frequent value) and frequency(frequency of the top value)
     """
 
+    #pd.set_option("display.max_columns", None)
+
+
+def missing(excel_file_df):
+    ##Activity 4
+    #print(excel_file_df)
+    #print(excel_file_df.isnull()), show all rows with empty value in data set as true(empty) and false(filled)
+    #missing_rows = excel_file_df[excel_file_df.isna().any(axis=1)], extract rows with empty values
+    #print(missing_rows)
+    #missing_columns = excel_file_df[excel_file_df.isna().any(axis=1)], extract columns with empty values
+    #print(missing_columns)
     pd.set_option("display.max_columns", None)
-   
+
+def histo_box(file_df):
+    ##Activity 5
+    # Create a histogram of the DataFrame
+    #columns = ["participants_m", "participants_f"], specific columns in the DataFrame
+    #file_df[columns].hist()
+
+    ##Activity 6
+    #All columns
+    
+    boxplot = file_df.boxplot()
+    plt.show()
+
+    #Only sports column
+    column = ["participants_f"]
+    file_df[column].boxplot()
+    
+    # Show the plot
+    plt.show()
+
+def line_chart(xlsx_df):
+    ##Activity 7
+    
+  
+  subset = xlsx_df[["year", "participants_f", "participants_m"]]
+  subset.plot(x='year', y = 'participants_f', color = 'blue' )
+  subset.plot(x='year', y = 'participants_m', color = 'green' )
+  plt.show()
+ 
+
+
 if __name__ == "__main__":
     # Filepath of the csv data file (you may have used importlib.resources rather than pathlib.Path)
     paralympics_xlsx = Path(__file__).parent.parent.joinpath("activities", "data", "paralympics_all_raw.xlsx")
 
     # Read the data from the file into a Pandas dataframe
     name_of_sheet = "games"
-    events_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name= name_of_sheet)
+    events_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name = name_of_sheet)
    
-    # Call the function named 'describe_dataframe' - you may have a different name for your function
-    describe(events_xlsx_df)
+    # Call the functions
+    line_chart(events_xlsx_df)
+    #describe(events_xlsx_df)
+    #missing(events_xlsx_df)
+    #histo_box(events_xlsx_df)
