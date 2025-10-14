@@ -97,14 +97,23 @@ def histo_box(file_df):
 
 def line_chart(xlsx_df):
     ##Activity 7
-    
-  
-  subset = xlsx_df[["year", "participants_f", "participants_m"]]
-  subset.plot(x='year', y = 'participants_f', color = 'blue' )
-  subset.plot(x='year', y = 'participants_m', color = 'green' )
-  plt.show()
- 
+    #rint column, non-null count and data type
+    #xlsx_df.pivot(xlsx_df["year"], xlsx_df["type"], xlsx_df["participants"]).plot()
 
+    for season, group in xlsx_df.groupby("type"):
+        color = "blue" if season.lower() == "winter" else "green"
+        plt.plot(group["year"], group["participants"], label= season.capitalize(), color=color)
+
+    plt.title("Paralympics Participants by Year and Season")
+    plt.xlabel("Year")
+    plt.ylabel("Participants")
+   
+    plt.show()
+    
+    #plt.show()
+ 
+#color = "blue" if t.lower() == "winter" else "green"
+#        plt.plot(group["year"], group["participants"], label=t.capitalize(), color=color)
 
 if __name__ == "__main__":
     # Filepath of the csv data file (you may have used importlib.resources rather than pathlib.Path)
