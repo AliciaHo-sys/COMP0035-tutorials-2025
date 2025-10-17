@@ -111,6 +111,7 @@ def line_chart(xlsx_df):
     plt.show()
     
 def categorical_data_identify(df_file):
+    ## Activity 8
     print("Distinct categorical values in the event 'type' column")
     print(df_file['type'].unique())
     print("\n", "Count of each distinct categorical value in the event 'type' column")
@@ -119,24 +120,22 @@ def categorical_data_identify(df_file):
 
 def data_prep(para_xlsx_file):
     # actions and save to a xlsx file
-        ##Activity 10
+    
+        ##Activity 10, 12(removing space)
+
     ## Example 1: Find a row/column that matches a certain condition using loc with a query or mask
     # para_xlsx_file.query("type == 'winter '") return rows with the specified type
     # .index extracts the index values of those rows
     # para_xlsx_file.loc[] selects those rows (by their index) and targets the type column
     # = 'winter' assign the "winter " to "winter" 
-
-    para_xlsx_file.loc[para_xlsx_file.query("type == 'winter ' ").index, 'type'] = 'winter' # query
-    para_xlsx_file.loc[para_xlsx_file['type'] == 'winter ', 'type'] = 'winter' # mask
+    #para_xlsx_file.loc[para_xlsx_file.query("type == 'winter ' ").index, 'type'] = 'winter'  # query
+    para_xlsx_file.loc[:,"type"] = para_xlsx_file.loc[:,"type"].str.strip()
+    print(para_xlsx_file['type'].value_counts())
+    prob = para_xlsx_file.loc[para_xlsx_file['type'] == 'winter ', 'type'] = 'winter' # mask
 
     # Example 2: Find the index of the row using `query`, and then use `at` to update the value.
     # NB Assumes only 1 row matches the criteria, amend to loop through all matching indices if more than one result.
-
-
-    # index = df.query("type == 'Summer'").index[0]
-    # df.at[index, 'type'] = 'summer'
-    # print(para_xlsx_file)
-    index = para_xlsx_file.query("type == 'winter '").index[0]
+    index = para_xlsx_file.query("type == 'winter'").index[0]
     para_xlsx_file.at[index, 'type'] = 'winter'
     
 
@@ -145,8 +144,12 @@ def data_prep(para_xlsx_file):
     row_idx = para_xlsx_file.index.get_loc(row_pos)
     col_idx = para_xlsx_file.columns.get_loc('type')
     para_xlsx_file.iloc[row_idx, col_idx] = 'winter'
-    print(row_pos, row_idx, col_idx) #correct
-
+    #print(row_pos, row_idx, col_idx) #correct
+   
+        ##Activity 11, drop columns in new DataFrame
+    df_prepared = para_xlsx_file.drop(columns=['URL', 'disabilities_included', 'highlights']) #drop these columns
+    #print(df_prepared.columns)
+        ##Activity 12
 
 
  
@@ -161,8 +164,8 @@ if __name__ == "__main__":
    
     ## Call the functions
         #Activity 8
-    categorical_data_identify(events_xlsx_df)
-        #Activity 9
+    #categorical_data_identify(events_xlsx_df)
+        #Activity 9, 10, 11
     data_prep(events_xlsx_df)
 
 
