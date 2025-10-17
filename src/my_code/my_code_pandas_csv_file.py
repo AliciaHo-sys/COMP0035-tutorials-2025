@@ -13,6 +13,13 @@ if __name__ == "__main__":
 
 """
 
+def categorical_identify(df_file):
+    print("Distinct categorical values in the event 'type' column")
+    print(df_file['type'].unique())
+    print("\n", "Count of each distinct categorical value in the event 'type' column")
+    print("", end=" ")
+    print(df_file['type'].value_counts())
+
 #alternate method    
 import pandas as pd
 from pathlib import Path
@@ -31,9 +38,9 @@ def main():
 
     
     #read_file = pd.read_csv(csv_file, sheet_name= 1)
-
-    events_csv_df.boxplot()
-    plt.show()
+    categorical_identify(events_csv_df)
+   # events_csv_df.boxplot()
+    #plt.show()
     
    
 if __name__ == "__main__":

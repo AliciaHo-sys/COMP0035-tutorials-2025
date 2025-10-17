@@ -41,17 +41,17 @@ def describe(xlsx_file):
 
     """
     
-    #print_shape = print(xlsx_file.shape), print the no of columns and rows
+    print_shape = print(xlsx_file.shape) #print the no of columns and rows
 
-    #print_head = print(xlsx_file.head()), print the first 5 rows
+    print_head = print(xlsx_file.head()) # print the first 5 rows
 
-    #print_tail = print(xlsx_file.tail()), print the last 5
+    print_tail = print(xlsx_file.tail()) #print the last 5
 
-    #print_col_label = print(xlsx_file.columns), print column labels
+    print_col_label = print(xlsx_file.columns) #print column labels
     
-    #print_dtypes = print(xlsx_file.dtypes), print data types
+    print_dtypes = print(xlsx_file.dtypes) #print data types
 
-    #print_info = xlsx_file.info(), print column, non-null count and data type
+    print_info = xlsx_file.info() #print column, non-null count and data type
 
     """
     print_describe = print(xlsx_file.describe()), 
@@ -63,13 +63,13 @@ def describe(xlsx_file):
     if (include='object'), print count, unique( no of no-null entries), top (most frequent value) and frequency(frequency of the top value)
     """
 
-    #pd.set_option("display.max_columns", None)
+    pd.set_option("display.max_columns", None)
 
 
 def missing(excel_file_df):
     ##Activity 4
     #print(excel_file_df)
-    #print(excel_file_df.isnull()), show all rows with empty value in data set as true(empty) and false(filled)
+    print(excel_file_df.isnull()) #show all rows with empty value in data set as true(empty) and false(filled)
     #missing_rows = excel_file_df[excel_file_df.isna().any(axis=1)], extract rows with empty values
     #print(missing_rows)
     #missing_columns = excel_file_df[excel_file_df.isna().any(axis=1)], extract columns with empty values
@@ -110,10 +110,15 @@ def line_chart(xlsx_df):
    
     plt.show()
     
-    #plt.show()
+def categorical_data_identify(df_file):
+    print("Distinct categorical values in the event 'type' column")
+    print(df_file['type'].unique())
+    print("\n", "Count of each distinct categorical value in the event 'type' column")
+    print("", end=" ")
+    print(df_file['type'].value_counts())
+
+
  
-#color = "blue" if t.lower() == "winter" else "green"
-#        plt.plot(group["year"], group["participants"], label=t.capitalize(), color=color)
 
 if __name__ == "__main__":
     # Filepath of the csv data file (you may have used importlib.resources rather than pathlib.Path)
@@ -123,8 +128,15 @@ if __name__ == "__main__":
     name_of_sheet = "games"
     events_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name = name_of_sheet)
    
-    # Call the functions
-    line_chart(events_xlsx_df)
+    ## Call the functions
+    
+    categorical_data_identify(events_xlsx_df)
+
+
+
+    ####Organise into activities
+    #Activity 3
     #describe(events_xlsx_df)
     #missing(events_xlsx_df)
     #histo_box(events_xlsx_df)
+    #line_chart(events_xlsx_df)
