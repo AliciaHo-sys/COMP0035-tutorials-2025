@@ -129,9 +129,9 @@ def data_prep(para_xlsx_file):
     # para_xlsx_file.loc[] selects those rows (by their index) and targets the type column
     # = 'winter' assign the "winter " to "winter" 
     #para_xlsx_file.loc[para_xlsx_file.query("type == 'winter ' ").index, 'type'] = 'winter'  # query
-    para_xlsx_file.loc[:,"type"] = para_xlsx_file.loc[:,"type"].str.strip()
-    print(para_xlsx_file['type'].value_counts())
-    prob = para_xlsx_file.loc[para_xlsx_file['type'] == 'winter ', 'type'] = 'winter' # mask
+    para_xlsx_file.loc[:,"type"] = para_xlsx_file.loc[:,"type"].str.strip() #Activity 12, remove all entries from space
+    #print(para_xlsx_file['type'].value_counts())
+    #prob = para_xlsx_file.loc[para_xlsx_file['type'] == 'winter ', 'type'] = 'winter' # mask
 
     # Example 2: Find the index of the row using `query`, and then use `at` to update the value.
     # NB Assumes only 1 row matches the criteria, amend to loop through all matching indices if more than one result.
@@ -148,8 +148,18 @@ def data_prep(para_xlsx_file):
    
         ##Activity 11, drop columns in new DataFrame
     df_prepared = para_xlsx_file.drop(columns=['URL', 'disabilities_included', 'highlights']) #drop these columns
-    #print(df_prepared.columns)
-        ##Activity 12
+    print(df_prepared.columns)
+        ##Activity 13
+    columns_to_change= ['countries', 'events', 'participants_m', 'participants_f', 'participants']
+    if df_prepared[columns_to_change].isna():
+        df_prepared[columns_to_change].fillna(0).astype(int)  # Replaces the missing values with 0
+
+    #df_prepared[columns_to_change] = df_prepared[columns_to_change].astype('Int64')  # Handles NaN without replacing values
+    else:
+        df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
+    print(df_prepared.dtypes)
+    
+        
 
 
  
