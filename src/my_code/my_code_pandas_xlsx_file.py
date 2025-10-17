@@ -68,19 +68,19 @@ def describe(xlsx_file):
 
 def missing(excel_file_df):
     ##Activity 4
-    #print(excel_file_df)
+    print(excel_file_df)
     print(excel_file_df.isnull()) #show all rows with empty value in data set as true(empty) and false(filled)
-    #missing_rows = excel_file_df[excel_file_df.isna().any(axis=1)], extract rows with empty values
-    #print(missing_rows)
-    #missing_columns = excel_file_df[excel_file_df.isna().any(axis=1)], extract columns with empty values
-    #print(missing_columns)
+    missing_rows = excel_file_df[excel_file_df.isna().any(axis=1)] #, extract rows with empty values
+    print(missing_rows)
+    missing_columns = excel_file_df[excel_file_df.isna().any(axis=1)]#, extract columns with empty values
+    print(missing_columns)
     pd.set_option("display.max_columns", None)
 
 def histo_box(file_df):
     ##Activity 5
     # Create a histogram of the DataFrame
-    #columns = ["participants_m", "participants_f"], specific columns in the DataFrame
-    #file_df[columns].hist()
+    columns = ["participants_m", "participants_f"]#, specific columns in the DataFrame
+    file_df[columns].hist()
 
     ##Activity 6
     #All columns
@@ -151,15 +151,17 @@ def data_prep(para_xlsx_file):
     #print(df_prepared.columns)
         ##Activity 13
     columns_to_change= ['countries', 'sports', 'events', 'participants_m', 'participants_f', 'participants']
-   
-    #para_xlsx_file[columns_to_change].fillna(0).astype(int)  # Replaces the missing values with 0
     for entries in columns_to_change:
         if df_prepared[entries].isna().any(): #Check any missing values in the column
             df_prepared[columns_to_change] = df_prepared[columns_to_change].astype('Int64')  # Handles NaN without replacing values
         else:
             df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
+    time_column = ['start', 'end']
     print(df_prepared.dtypes)
-    print(df_prepared)
+
+    for time in time_column:
+        df_prepared[time] = pd.to_datetime(df_prepared[time], format='%d/%m/%Y')
+    print(df_prepared.dtypes)
     pd.set_option("display.max_columns", None)
     
         

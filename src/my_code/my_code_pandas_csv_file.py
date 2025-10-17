@@ -48,8 +48,11 @@ def data_prep(df):
             df_prepared[columns_to_change] = df_prepared[columns_to_change].astype('Int64')  # Handles NaN without replacing values
         else:
             df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
-    print(df_prepared.dtypes)
-    print(df_prepared)
+    time_column = ['start', 'end']
+    print(df_prepared.head())
+    for time in time_column:
+       df_prepared[time] = pd.to_datetime(df_prepared[time], format='%d/%m/%Y')
+    print(df_prepared.head())
     pd.set_option("display.max_columns", None)
 
 #alternate method    
