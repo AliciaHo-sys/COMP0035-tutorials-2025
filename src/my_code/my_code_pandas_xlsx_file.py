@@ -157,11 +157,13 @@ def data_prep(para_xlsx_file):
         else:
             df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
     time_column = ['start', 'end']
-    print(df_prepared.dtypes)
-
     for time in time_column:
         df_prepared[time] = pd.to_datetime(df_prepared[time], format='%d/%m/%Y')
-    print(df_prepared.dtypes)
+   
+    ##Activity 14
+    duration_values = (df_prepared['end'] - df_prepared['start']).dt.days.astype('Int64')
+    df_prepared.insert(df_prepared.columns.get_loc('end') + 1, 'duration', duration_values)
+    print(df_prepared['duration'])
     pd.set_option("display.max_columns", None)
     
         

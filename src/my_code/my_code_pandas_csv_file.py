@@ -39,9 +39,9 @@ def data_prep(df):
     """
     ##Activity 11, drop columns in new DataFrame
     df_prepared = df.drop(columns=['URL', 'disabilities_included', 'highlights']) #drop these columns
+    
          ##Activity 13
     columns_to_change= ['countries', 'events', 'participants_m', 'participants_f', 'participants']
-   
     #para_xlsx_file[columns_to_change].fillna(0).astype(int)  # Replaces the missing values with 0
     for entries in columns_to_change:
         if df_prepared[entries].isna().any(): #Check any missing values in the column
@@ -49,10 +49,9 @@ def data_prep(df):
         else:
             df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
     time_column = ['start', 'end']
-    print(df_prepared.head())
     for time in time_column:
        df_prepared[time] = pd.to_datetime(df_prepared[time], format='%d/%m/%Y')
-    print(df_prepared.head())
+    
     pd.set_option("display.max_columns", None)
 
 #alternate method    
