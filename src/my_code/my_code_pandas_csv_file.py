@@ -20,6 +20,22 @@ def categorical_identify(df_file):
     print("", end=" ")
     print(df_file['type'].value_counts())
 
+def data_prep(df):
+    # Example 1: Find a row/column that matches a certain condition using loc with a query or mask
+    df.loc[df.query("type == 'Summer'").index, 'type'] = 'summer' # query
+    df.loc[df['type'] == 'Summer', 'type'] = 'summer' # mask
+
+    # Example 2: Find the index of the row using `query`, and then use `at` to update the value.
+    # NB Assumes only 1 row matches the criteria, amend to loop through all matching indices if more than one result.
+    index = df.query("type == 'Summer'").index[0]
+    df.at[index, 'type'] = 'summer'
+
+    # Example 3: Uses iloc which only works with integers so you need to find the row & column integer references first
+    row_pos = df.query("type == 'Summer'").index[0]
+    row_idx = df.index.get_loc(row_pos)
+    col_idx = df.columns.get_loc('type')
+    df.iloc[row_idx, col_idx] = 'summer'
+
 #alternate method    
 import pandas as pd
 from pathlib import Path
@@ -38,7 +54,8 @@ def main():
 
     
     #read_file = pd.read_csv(csv_file, sheet_name= 1)
-    categorical_identify(events_csv_df)
+    #categorical_identify(events_csv_df)
+    data_prep(events_csv_df)
    # events_csv_df.boxplot()
     #plt.show()
     

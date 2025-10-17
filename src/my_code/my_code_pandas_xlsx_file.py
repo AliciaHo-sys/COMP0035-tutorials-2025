@@ -117,6 +117,40 @@ def categorical_data_identify(df_file):
     print("", end=" ")
     print(df_file['type'].value_counts())
 
+def data_prep(para_xlsx_file):
+    # actions and save to a xlsx file
+        ##Activity 10
+    ## Example 1: Find a row/column that matches a certain condition using loc with a query or mask
+    # para_xlsx_file.query("type == 'winter '") return rows with the specified type
+    # .index extracts the index values of those rows
+    # para_xlsx_file.loc[] selects those rows (by their index) and targets the type column
+    # = 'winter' assign the "winter " to "winter" 
+    para_xlsx_file.loc[para_xlsx_file.query("type == 'winter ' ").index, 'type'] = 'winter' # query
+    para_xlsx_file.loc[para_xlsx_file['type'] == 'winter ', 'type'] = 'winter' # mask
+
+    # Example 2: Find the index of the row using `query`, and then use `at` to update the value.
+    # NB Assumes only 1 row matches the criteria, amend to loop through all matching indices if more than one result.
+
+    
+    # index = df.query("type == 'Summer'").index[0]
+    # df.at[index, 'type'] = 'summer'
+    
+    matches = para_xlsx_file.query("type == 'winter '")
+    if not matches.empty:
+        index = matches.index[0]
+        para_xlsx_file.at[index, 'type'] = 'winter'
+    
+    else:
+        print("No rows found for type == 'winter'")
+    
+"""
+    # Example 3: Uses iloc which only works with integers so you need to find the row & column integer references first
+    row_pos = para_xlsx_file.query("type == 'Summer'").index[0]
+    row_idx = para_xlsx_file.index.get_loc(row_pos)
+    col_idx = para_xlsx_file.columns.get_loc('type')
+    para_xlsx_file.iloc[row_idx, col_idx] = 'summer'
+
+"""
 
  
 
@@ -129,8 +163,10 @@ if __name__ == "__main__":
     events_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name = name_of_sheet)
    
     ## Call the functions
-    
+        #Activity 8
     categorical_data_identify(events_xlsx_df)
+        #Activity 9
+    data_prep(events_xlsx_df)
 
 
 
