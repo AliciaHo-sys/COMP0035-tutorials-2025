@@ -21,7 +21,8 @@ def categorical_identify(df_file):
     print(df_file['type'].value_counts())
 
 def data_prep(df):
-    # Example 1: Find a row/column that matches a certain condition using loc with a query or mask
+    """
+            # Example 1: Find a row/column that matches a certain condition using loc with a query or mask
     df.loc[df.query("type == 'Summer'").index, 'type'] = 'summer' # query
     df.loc[df['type'] == 'Summer', 'type'] = 'summer' # mask
 
@@ -35,6 +36,21 @@ def data_prep(df):
     row_idx = df.index.get_loc(row_pos)
     col_idx = df.columns.get_loc('type')
     df.iloc[row_idx, col_idx] = 'summer'
+    """
+    ##Activity 11, drop columns in new DataFrame
+    df_prepared = df.drop(columns=['URL', 'disabilities_included', 'highlights']) #drop these columns
+         ##Activity 13
+    columns_to_change= ['countries', 'events', 'participants_m', 'participants_f', 'participants']
+   
+    #para_xlsx_file[columns_to_change].fillna(0).astype(int)  # Replaces the missing values with 0
+    for entries in columns_to_change:
+        if df_prepared[entries].isna().any(): #Check any missing values in the column
+            df_prepared[columns_to_change] = df_prepared[columns_to_change].astype('Int64')  # Handles NaN without replacing values
+        else:
+            df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
+    print(df_prepared.dtypes)
+    print(df_prepared)
+    pd.set_option("display.max_columns", None)
 
 #alternate method    
 import pandas as pd

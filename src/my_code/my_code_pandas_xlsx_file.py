@@ -148,16 +148,19 @@ def data_prep(para_xlsx_file):
    
         ##Activity 11, drop columns in new DataFrame
     df_prepared = para_xlsx_file.drop(columns=['URL', 'disabilities_included', 'highlights']) #drop these columns
-    print(df_prepared.columns)
+    #print(df_prepared.columns)
         ##Activity 13
-    columns_to_change= ['countries', 'events', 'participants_m', 'participants_f', 'participants']
-    if df_prepared[columns_to_change].isna():
-        df_prepared[columns_to_change].fillna(0).astype(int)  # Replaces the missing values with 0
-
-    #df_prepared[columns_to_change] = df_prepared[columns_to_change].astype('Int64')  # Handles NaN without replacing values
-    else:
-        df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
+    columns_to_change= ['countries', 'sports', 'events', 'participants_m', 'participants_f', 'participants']
+   
+    #para_xlsx_file[columns_to_change].fillna(0).astype(int)  # Replaces the missing values with 0
+    for entries in columns_to_change:
+        if df_prepared[entries].isna().any(): #Check any missing values in the column
+            df_prepared[columns_to_change] = df_prepared[columns_to_change].astype('Int64')  # Handles NaN without replacing values
+        else:
+            df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
     print(df_prepared.dtypes)
+    print(df_prepared)
+    pd.set_option("display.max_columns", None)
     
         
 
