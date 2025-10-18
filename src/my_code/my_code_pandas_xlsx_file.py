@@ -118,7 +118,7 @@ def categorical_data_identify(df_file):
     print("", end=" ")
     print(df_file['type'].value_counts())
 
-def data_prep(para_xlsx_file, medals_df):
+def data_prep(para_xlsx_file):
     # actions and save to a xlsx file
     
         ##Activity 10, 12(removing space)
@@ -179,12 +179,15 @@ def data_prep(para_xlsx_file, medals_df):
     'China': "People's Republic of China"
 }
     df_prepared['country'] = df_prepared['country'].replace(replacement_names)
-   
     #tell how to merge, based on country names
     merged_df = df_prepared.merge(npc_xlsx_df, how='left', left_on='country', right_on='Name')  
     merged_df = merged_df.drop(columns = ['Name'])
-    print(merged_df[['country', 'Code']])
-    pd.set_option("display.max_columns", None)
+   
+        ##Activity 16
+    # #Save the dataframe into data folder without indices
+    file_path = Path(__file__).parent.parent.joinpath("activities", "data", "newDF.xlsx")
+    merged_df.to_excel(file_path, index = False)
+    
     
            
     
@@ -202,20 +205,13 @@ if __name__ == "__main__":
     # Read the data from the file into a Pandas dataframe
     name_of_sheet = "games"
     events_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name = name_of_sheet)
-    
-    name_2 = "medal_standings"
-    awards_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name = name_2, usecols= ['Team', 'NPC'])
-    
-    
-    
    
     ## Call the functions
         #Activity 8
     #categorical_data_identify(events_xlsx_df)
 
         #Activity 9 - 15
-    data_prep(events_xlsx_df, awards_xlsx_df)
-
+    data_prep(events_xlsx_df)
        
 
 
