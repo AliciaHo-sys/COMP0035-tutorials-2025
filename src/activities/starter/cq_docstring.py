@@ -76,6 +76,53 @@ def get_column_names_s(db_path: str, table_name: str) -> list:
 # Copilot in VSCode / PyCharm
 # Place the cursor under the function name and generate a docstring e.g. '/doc Google-style docstring'
 def generate_histogram(df: pd.DataFrame):
+    """
+    Generate and save histograms for a pandas DataFrame.
+    This function creates and saves three sets of histogram plots:
+    1. Histograms for all columns in the DataFrame that have plottable numeric types.
+        Saved to "output/histogram_df.png".
+    2. Histograms for the specific columns "participants_m" and "participants_f".
+        Saved to "output/histogram_participants.png".
+    3. Histograms for rows filtered where the "type" column equals "summer".
+        Saved to "output/histogram_summer.png".
+    Args:
+         df (pd.DataFrame): Input DataFrame containing the data to visualize. Numeric
+              columns will be plotted in the general histogram. For the specialized
+              histograms this function expects (but does not require at call time)
+              columns named "participants_m", "participants_f", and "type" to exist.
+    Returns:
+         None: The function writes PNG files to the "output/" directory as described
+         above and does not return a value.
+    Raises:
+         ValueError: If `df` is None or empty.
+         KeyError: If "participants_m" or "participants_f" are missing when attempting
+              to create the participants-specific histogram, or if "type" is missing
+              when attempting to create the filtered (summer) histogram.
+         ImportError: If required plotting libraries (e.g., matplotlib or pandas)
+              are not available in the environment.
+         OSError: If the function is unable to write files to the "output/" directory
+              (for example, due to missing directory or filesystem permissions).
+    Notes:
+         - The function relies on pandas.DataFrame.hist and matplotlib.pyplot.savefig.
+         - It saves files but does not explicitly close or clear matplotlib figures;
+            callers may want to ensure figures are closed (e.g., plt.close()) if
+            generating many plots in a long-running process to avoid memory growth.
+         - It is recommended to ensure that the "output/" directory exists and is
+            writable before calling this function.
+    Examples:
+         >>> import pandas as pd
+         >>> df = pd.DataFrame({
+         ...     "participants_m": [10, 12, 9],
+         ...     "participants_f": [8, 11, 7],
+         ...     "type": ["summer", "winter", "summer"],
+         ...     "score": [1.2, 3.4, 2.1]
+         ... })
+         >>> generate_histogram(df)
+         # -> Writes output/histogram_df.png, output/histogram_participants.png,
+         #    and output/histogram_summer.png
+    """
+    
+
     # Histogram of any columns with values of a data type that can be plotted
     df.hist(
         sharey=False,  # defines whether y-axes will be shared among subplots.
@@ -111,5 +158,15 @@ def describe(csv_data_file: str) -> dict:
        csv_data_file (str): File path of the .csv format data file.
 
     """
-
+    df = pd.read_csv(csv_data_file)
+    description = {
+        "shape": df.shape,
+        "head": df.head(),
+        "tail": df.tail(),
+        "columns": df.columns.tolist(),
+        "dtypes": df.dtypes.to_dict(),
+        "describe": df.describe().to_dict(),
+        "info": df.info()
+    }
+    return description  
     pass

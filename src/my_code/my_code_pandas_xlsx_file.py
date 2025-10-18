@@ -187,6 +187,7 @@ def data_prep(para_xlsx_file):
     # #Save the dataframe into data folder without indices
     file_path = Path(__file__).parent.parent.joinpath("activities", "data", "newDF.xlsx")
     merged_df.to_excel(file_path, index = False)
+    return merged_df
     
     
            
