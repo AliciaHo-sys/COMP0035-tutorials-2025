@@ -63,12 +63,10 @@ def data_prep(df):
     'China': "People's Republic of China"
 }
 
-    for country in df_prepared['country']:
-        if country in replacement_names:
-            df_prepared.loc[df_prepared.query(f"country == '{country}'").index, 'country'] = replacement_names[country] 
+    df_prepared['country'] = df_prepared['country'].replace(replacement_names)
     print(df_prepared)
     merged_df = df_prepared.merge(npc_xlsx_df, how='left', left_on='country', right_on='Code')   
-    merged_df['Name'] = merged_df['country']
+    
     
     required = ['country', 'Code', 'Name']
     print(merged_df[required])

@@ -160,26 +160,32 @@ def data_prep(para_xlsx_file, medals_df):
     for time in time_column: #change time into data time format (D-M-Y)
         df_prepared[time] = pd.to_datetime(df_prepared[time], format='%d/%m/%Y')
    
+   
     ##Activity 14
     #Add a new duration column
     duration_values = (df_prepared['end'] - df_prepared['start']).dt.days.astype('Int64')
     df_prepared.insert(df_prepared.columns.get_loc('end') + 1, 'duration', duration_values)
-    #print(df_prepared)
+
     
     ##Activity 15, merge files with matching columns and updating the Code of each country from reading a new file
     npc_xlsx = Path(__file__).parent.parent.joinpath("activities", "data", "npc_codes.xlsx")    
     npc_xlsx_df = pd.read_excel(npc_xlsx, usecols=['Code', 'Name'])
           
-    for country in df_prepared['country']:
-        df_prepared.loc[df_prepared.query(f"country == '{country}'").index, 'country'] = npc_xlsx_df['Name']
-    
-    merged_df = df_prepared.merge(npc_xlsx_df, how='left', left_on='country', right_on='Code')   
-    merged_df['Name'] = merged_df['country']
-    for country in merged_df['country']:
-        merged_df.loc[merged_df.query(f"country == '{country}'").index, 'Code'] = npc_xlsx_df['Code']
-    merged_df = merged_df.drop(columns=['Name'])
+    replacement_names = {
+    'UK': 'Great Britain',
+    'USA': 'United States of America',
+    'Korea': 'Republic of Korea',
+    'Russia': 'Russian Federation',
+    'China': "People's Republic of China"
+}
+    df_prepared['country'] = df_prepared['country'].replace(replacement_names)
+   
+    #tell how to merge, based on country names
+    merged_df = df_prepared.merge(npc_xlsx_df, how='left', left_on='country', right_on='Name')  
+    merged_df = merged_df.drop(columns = ['Name'])
     print(merged_df[['country', 'Code']])
     pd.set_option("display.max_columns", None)
+    
            
     
     
