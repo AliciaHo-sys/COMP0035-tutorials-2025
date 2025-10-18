@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
 """
 
-def categorical_identify(df_file):
+def categorical_identify(df_file, medals_df):
     print("Distinct categorical values in the event 'type' column")
     print(df_file['type'].unique())
     print("\n", "Count of each distinct categorical value in the event 'type' column")
@@ -39,7 +39,7 @@ def data_prep(df):
     """
     ##Activity 11, drop columns in new DataFrame
     df_prepared = df.drop(columns=['URL', 'disabilities_included', 'highlights']) #drop these columns
-    
+
          ##Activity 13
     columns_to_change= ['countries', 'events', 'participants_m', 'participants_f', 'participants']
     #para_xlsx_file[columns_to_change].fillna(0).astype(int)  # Replaces the missing values with 0
@@ -52,6 +52,26 @@ def data_prep(df):
     for time in time_column:
        df_prepared[time] = pd.to_datetime(df_prepared[time], format='%d/%m/%Y')
     
+    npc_xlsx = Path(__file__).parent.parent.joinpath("activities", "data", "npc_codes.csv")    
+    npc_xlsx_df = pd.read_csv(npc_xlsx, usecols=['Code', 'Name'])
+    
+    replacement_names = {
+    'UK': 'Great Britain',
+    'USA': 'United States of America',
+    'Korea': 'Republic of Korea',
+    'Russia': 'Russian Federation',
+    'China': "People's Republic of China"
+}
+
+    for country in df_prepared['country']:
+        if country in replacement_names:
+            df_prepared.loc[df_prepared.query(f"country == '{country}'").index, 'country'] = replacement_names[country] 
+    print(df_prepared)
+    merged_df = df_prepared.merge(npc_xlsx_df, how='left', left_on='country', right_on='Code')   
+    merged_df['Name'] = merged_df['country']
+    
+    required = ['country', 'Code', 'Name']
+    print(merged_df[required])
     pd.set_option("display.max_columns", None)
 
 #alternate method    
@@ -65,7 +85,9 @@ def main():
     # Find the .csv file relative to the project root and join to that path the data folder and then the example.csv file
     csv_file = project_root.joinpath('activities', 'data', 'paralympics_raw.csv')
     # csv_file = project_root / 'data' / 'example.csv' # this notation would also work, even though you think the '/' is only unix/macOS
-
+    name_2 = "medal_standings"
+    awards_xlsx_df = pd.read_csv(csv_file, sheet_name = name_2, usecols= ['Team', 'NPC'])
+    
     # Check if the file exists, this will print 'true' if it exists
     print(csv_file.exists())
     events_csv_df = pd.read_csv(csv_file)
@@ -73,7 +95,7 @@ def main():
     
     #read_file = pd.read_csv(csv_file, sheet_name= 1)
     #categorical_identify(events_csv_df)
-    data_prep(events_csv_df)
+    data_prep(events_csv_df, awards_xlsx_df)
    # events_csv_df.boxplot()
     #plt.show()
     

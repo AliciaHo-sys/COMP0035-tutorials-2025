@@ -118,7 +118,7 @@ def categorical_data_identify(df_file):
     print("", end=" ")
     print(df_file['type'].value_counts())
 
-def data_prep(para_xlsx_file):
+def data_prep(para_xlsx_file, medals_df):
     # actions and save to a xlsx file
     
         ##Activity 10, 12(removing space)
@@ -149,7 +149,7 @@ def data_prep(para_xlsx_file):
         ##Activity 11, drop columns in new DataFrame
     df_prepared = para_xlsx_file.drop(columns=['URL', 'disabilities_included', 'highlights']) #drop these columns
     #print(df_prepared.columns)
-        ##Activity 13
+        ##Activity 13, covert all entries into integer dtype and handle NaN entries 
     columns_to_change= ['countries', 'sports', 'events', 'participants_m', 'participants_f', 'participants']
     for entries in columns_to_change:
         if df_prepared[entries].isna().any(): #Check any missing values in the column
@@ -157,14 +157,43 @@ def data_prep(para_xlsx_file):
         else:
             df_prepared[columns_to_change] = df_prepared[columns_to_change].astype(int) #converting column entries into integers
     time_column = ['start', 'end']
-    for time in time_column:
+    for time in time_column: #change time into data time format (D-M-Y)
         df_prepared[time] = pd.to_datetime(df_prepared[time], format='%d/%m/%Y')
    
     ##Activity 14
+    #Add a new duration column
     duration_values = (df_prepared['end'] - df_prepared['start']).dt.days.astype('Int64')
     df_prepared.insert(df_prepared.columns.get_loc('end') + 1, 'duration', duration_values)
-    print(df_prepared['duration'])
+    #print(df_prepared)
+    
+    ##Activity 15
+    npc_xlsx = Path(__file__).parent.parent.joinpath("activities", "data", "npc_codes.xlsx")    
+    npc_xlsx_df = pd.read_excel(npc_xlsx, usecols=['Code', 'Name'])
+    #print(medals_df)
+    replacement_names = {
+    'UK': 'Great Britain',
+    'USA': 'United States of America',
+    'Korea': 'Republic of Korea',
+    'Russia': 'Russian Federation',
+    'China': "People's Republic of China"
+}
+    
+    for country in df_prepared['country']:
+        df_prepared.loc[df_prepared.query(f"country == '{country}'").index, 'country'] = npc_xlsx_df['Name']
+        
+            
+
+    
+    #print(df_prepared)
+    merged_df = df_prepared.merge(npc_xlsx_df, how='left', left_on='country', right_on='Code')   
+    merged_df['Name'] = merged_df['country']
+    for country in merged_df['country']:
+        merged_df.loc[merged_df.query(f"country == '{country}'").index, 'Code'] = npc_xlsx_df['Code']
+    merged_df = merged_df.drop(columns=['Name'])
+    print(merged_df)
     pd.set_option("display.max_columns", None)
+           
+    
     
         
 
@@ -174,16 +203,26 @@ def data_prep(para_xlsx_file):
 if __name__ == "__main__":
     # Filepath of the csv data file (you may have used importlib.resources rather than pathlib.Path)
     paralympics_xlsx = Path(__file__).parent.parent.joinpath("activities", "data", "paralympics_all_raw.xlsx")
+    
 
     # Read the data from the file into a Pandas dataframe
     name_of_sheet = "games"
     events_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name = name_of_sheet)
+    
+    name_2 = "medal_standings"
+    awards_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name = name_2, usecols= ['Team', 'NPC'])
+    
+    
+    
    
     ## Call the functions
         #Activity 8
     #categorical_data_identify(events_xlsx_df)
-        #Activity 9, 10, 11
-    data_prep(events_xlsx_df)
+
+        #Activity 9 - 15
+    data_prep(events_xlsx_df, awards_xlsx_df)
+
+       
 
 
 
