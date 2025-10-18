@@ -190,7 +190,7 @@ def data_prep(para_xlsx_file, medals_df):
     for country in merged_df['country']:
         merged_df.loc[merged_df.query(f"country == '{country}'").index, 'Code'] = npc_xlsx_df['Code']
     merged_df = merged_df.drop(columns=['Name'])
-    print(merged_df)
+    print(merged_df[['country', 'Code']])
     pd.set_option("display.max_columns", None)
            
     
