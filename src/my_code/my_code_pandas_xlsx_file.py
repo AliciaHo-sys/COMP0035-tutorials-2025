@@ -207,12 +207,13 @@ if __name__ == "__main__":
     name_of_sheet = "games"
     events_xlsx_df = pd.read_excel(paralympics_xlsx, sheet_name = name_of_sheet)
    
+   
     ## Call the functions
         #Activity 8
     #categorical_data_identify(events_xlsx_df)
 
         #Activity 9 - 15
-    data_prep(events_xlsx_df)
+   # print(data_prep(events_xlsx_df))
        
 
 
@@ -220,6 +221,6 @@ if __name__ == "__main__":
     ####Organise into activities
     #Activity 3
     #describe(events_xlsx_df)
-    #missing(events_xlsx_df)
+    missing(events_xlsx_df)
     #histo_box(events_xlsx_df)
     #line_chart(events_xlsx_df)
