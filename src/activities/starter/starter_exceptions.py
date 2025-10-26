@@ -5,7 +5,21 @@ import pandas as pd
 
 from activities import data
 
+"""
+Some of the more common exceptions to use:
 
+Python file handling:
+
+FileNotFound
+Pandas dataframes:
+
+AttributeError
+KeyError
+DtypeWarning
+sqlite3 invalid data:
+
+IntegrityError
+"""
 def print_data(file_path):
     """
     Attempts to open and read the contents of a file, handling potential errors gracefully.
@@ -95,6 +109,10 @@ def print_data_pattern_example(file_path):
 # Activity 4.7 add exception handling to this function
 def create_db(schema_path, db_path):
     """ Create a SQLite database using the provided schema file.
+    
+    
+    Raises: 
+    
 
     Args:
         schema_path (str): Path to the SQL schema file.
@@ -104,6 +122,15 @@ def create_db(schema_path, db_path):
     # Create a connection
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
+
+    try:
+        open(schema_path, 'r')
+    except FileNotFoundError as e:
+        print(f'Schema file not found: {e}')
+    except PermissionError as e:
+        print(f'Permission error when accessing schema file: {e}')
+    else:
+        print('Schema file opened successfully.')
 
     # Read the SQL schema file
     with open(schema_path, 'r') as f:

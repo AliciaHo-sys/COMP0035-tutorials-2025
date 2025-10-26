@@ -176,8 +176,8 @@ def data_prep(para_xlsx_file):
     'USA': 'United States of America',
     'Korea': 'Republic of Korea',
     'Russia': 'Russian Federation',
-    'China': "People's Republic of China"
-}
+    'China': "People's Republic of China"}
+
     df_prepared['country'] = df_prepared['country'].replace(replacement_names)
     #tell how to merge, based on country names
     merged_df = df_prepared.merge(npc_xlsx_df, how='left', left_on='country', right_on='Name')  
@@ -214,13 +214,14 @@ if __name__ == "__main__":
 
         #Activity 9 - 15
    # print(data_prep(events_xlsx_df))
-       
-
-
-
     ####Organise into activities
     #Activity 3
     #describe(events_xlsx_df)
-    missing(events_xlsx_df)
+
+    #Activity 4
+    # missing(events_xlsx_df)
     #histo_box(events_xlsx_df)
     #line_chart(events_xlsx_df)
+
+    ##Tutorial 3
+    #activity 1 and 2
