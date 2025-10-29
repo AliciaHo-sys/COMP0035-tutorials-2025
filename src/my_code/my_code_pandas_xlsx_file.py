@@ -213,7 +213,7 @@ if __name__ == "__main__":
     #categorical_data_identify(events_xlsx_df)
 
         #Activity 9 - 15
-   # print(data_prep(events_xlsx_df))
+    print(data_prep(events_xlsx_df))
     ####Organise into activities
     #Activity 3
     #describe(events_xlsx_df)
