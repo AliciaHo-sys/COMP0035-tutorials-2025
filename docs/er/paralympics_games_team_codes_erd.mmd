@@ -1,0 +1,46 @@
+---
+title: Paralympics — Games & Team Codes ERD
+created: 2025-10-29
+---
+
+```mermaid
+erDiagram
+    %% Entities derived from sheets: 'games' and 'team_codes'
+
+    %% GAME attributes (from 'games' sheet)
+    %% game_id = surrogate PK; country is country name as provided in games sheet
+    %% country_code is an optional FK to TEAM_CODE.code if a mapping exists
+    GAME {
+        game_id string PK
+        type string
+        year int
+        country string
+        country_code string FK
+        host string
+        start date
+        end date
+        disabilities_included string
+        countries_count int
+        events_count int
+        sports_count int
+        participants_m int
+        participants_f int
+        participants int
+        highlights string
+        url string
+    }
+
+    %% TEAM_CODE attributes (from 'team_codes' sheet)
+    TEAM_CODE {
+        code string PK
+        team_name string
+        region string
+        subregion string
+        member_type string
+        notes string
+    }
+
+    %% Relationship notes:
+    %% A GAME may be associated with a TEAM_CODE (e.g., host country code) if a mapping exists.
+    TEAM_CODE ||--o{ GAME : "may_host"
+```

@@ -1,9 +1,3 @@
----
-title: Student Data ERD
-created: 2025-10-29
----
-
-```mermaid
 erDiagram
     %% Columns: PK/FK | Field (example) | Type (example)
     %% PK   | teacher_id (e.g. teacherId)    | string
@@ -50,4 +44,4 @@ erDiagram
     COURSE ||--o{ ENROLLMENT : has
     STUDENT ||--o{ ENROLLMENT : enrolls
     STUDENT }o--o{ COURSE : "enrolled_in"
-```
+

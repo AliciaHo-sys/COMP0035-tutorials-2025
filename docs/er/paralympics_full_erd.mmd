@@ -1,0 +1,86 @@
+---
+title: Paralympics — Full ERD (Games, Disabilities, Countries, Hosts, Team Codes)
+created: 2025-10-29
+---
+
+```mermaid
+erDiagram
+    %% Full ERD covering: games_df, disability_df, country_df, host_df, df_codes (team_codes)
+
+    %% GAME entity (from games_df)
+    %% Notes: country_name is the raw name in games sheet; country_code can optionally map to COUNTRY.code; host_id links to HOST
+    GAME {
+        game_id string PK
+        type string
+        year int
+        country_name string
+        country_code string FK
+        host_id string FK
+        start date
+        end date
+        countries_count int
+        events_count int
+        sports_count int
+        participants_m int
+        participants_f int
+        participants int
+        highlights string
+        url string
+    }
+
+    %% DISABILITY catalogue (disability_df)
+    %% Notes: derived by splitting games.disabilities_included into canonical disability names
+    DISABILITY {
+        disability_id string PK
+        name string
+        description string
+    }
+
+    %% Many-to-many between GAME and DISABILITY
+    GAME_DISABILITY {
+        game_id string FK
+        disability_id string FK
+    }
+
+    %% COUNTRY dimension (country_df) - normalized country attributes
+    COUNTRY {
+        code string PK
+        name string
+        region string
+        subregion string
+        iso_alpha3 string
+        notes string
+    }
+
+    %% HOST entity (host_df) - host city / venue info
+    HOST {
+        host_id string PK
+        city string
+        country_code string FK
+        venue string
+        notes string
+    }
+
+    %% TEAM_CODE (df_codes / team_codes sheet)
+    TEAM_CODE {
+        code string PK
+        team_name string
+        region string
+        subregion string
+        member_type string
+        notes string
+    }
+
+    %% Relationships
+    COUNTRY ||--o{ GAME : "represented_in"
+    COUNTRY ||--o{ HOST : "hosts_in"
+    HOST ||--o{ GAME : "hosts"
+
+    GAME ||--o{ GAME_DISABILITY : "has"
+    DISABILITY ||--o{ GAME_DISABILITY : "included_in"
+
+    TEAM_CODE ||--o{ COUNTRY : "may_map_to"
+    TEAM_CODE ||--o{ GAME : "may_host"
+
+    %% Note: mapping from TEAM_CODE -> GAME is optional and requires a mapping between game.country_name and TEAM_CODE.team_name/code
+```

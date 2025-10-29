@@ -1,0 +1,30 @@
+erDiagram
+    TEACHER {
+        string teacher_id PK
+        string teacher_email
+        string teacher_name
+    }
+
+    STUDENT {
+        string student_id PK
+        string student_email
+        string student_name
+    }
+
+    COURSE {
+        string course_id PK
+        string course_code
+        string course_name
+        string course_schedule
+        string course_location
+        string teacher_id FK
+    }
+
+    ENROLLMENT {
+        string student_id PK, FK
+        string course_id PK, FK
+    }
+
+    TEACHER ||--o{ COURSE : teaches
+    COURSE ||--o{ ENROLLMENT : has
+    STUDENT ||--o{ ENROLLMENT : enrolls

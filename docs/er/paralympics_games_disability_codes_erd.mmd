@@ -1,0 +1,57 @@
+---
+title: Paralympics — Games, Disabilities & Team Codes ERD
+created: 2025-10-29
+---
+
+```mermaid
+erDiagram
+    %% Entities derived from: games_df (games sheet), disability_df (derived from games.disabilities_included), df_codes (team_codes sheet)
+
+    %% GAME: rows from 'games' sheet (use surrogate game_id as PK)
+    GAME {
+        game_id string PK
+        type string
+        year int
+        country string
+        host string
+        start date
+        end date
+        countries int
+        events int
+        sports int
+        participants_m int
+        participants_f int
+        participants int
+        highlights string
+        url string
+    }
+
+    %% DISABILITY: catalogue of disability categories (derived from splitting games.disabilities_included)
+    DISABILITY {
+        disability_id string PK
+        name string
+    }
+
+    %% GAME_DISABILITY: many-to-many between GAME and DISABILITY (one game may include multiple disabilities)
+    GAME_DISABILITY {
+        game_id string FK
+        disability_id string FK
+    }
+
+    %% TEAM_CODE: from 'team_codes' sheet
+    TEAM_CODE {
+        code string PK
+        team_name string
+        region string
+        subregion string
+        member_type string
+        notes string
+    }
+
+    %% Relationships
+    GAME ||--o{ GAME_DISABILITY : has
+    DISABILITY ||--o{ GAME_DISABILITY : "used_in"
+
+    %% Optional mapping: a GAME may be associated with a TEAM_CODE (e.g., host country code) if you map GAME.country -> TEAM_CODE.team_name
+    TEAM_CODE ||--o{ GAME : "may_host"
+```

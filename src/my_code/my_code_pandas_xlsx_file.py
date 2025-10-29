@@ -190,15 +190,7 @@ def data_prep(para_xlsx_file):
     return merged_df
     
     
-           
-    
-    
-        
-
-
- 
-
-if __name__ == "__main__":
+def main():
     # Filepath of the csv data file (you may have used importlib.resources rather than pathlib.Path)
     paralympics_xlsx = Path(__file__).parent.parent.joinpath("activities", "data", "paralympics_all_raw.xlsx")
     
@@ -225,3 +217,11 @@ if __name__ == "__main__":
 
     ##Tutorial 3
     #activity 1 and 2
+    
+        
+
+
+ 
+
+if __name__ == "__main__":
+    main()
