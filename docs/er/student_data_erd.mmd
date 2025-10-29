@@ -1,0 +1,53 @@
+---
+title: Student Data ERD
+created: 2025-10-29
+---
+
+```mermaid
+erDiagram
+    %% Columns: PK/FK | Field (example) | Type (example)
+    %% PK   | teacher_id (e.g. teacherId)    | string
+    %%      | teacher_email (e.g. teacher@example.com)    | string
+    %%      | teacher_name (e.g. John Smith)    | string
+    TEACHER {
+        teacher_id string PK
+        teacher_email string
+        teacher_name string
+    }
+    STUDENT {
+        %% Columns: PK/FK | Field (example) | Type (example)
+        %% PK   | student_id (e.g. studentId)    | string
+        %%      | student_email (e.g. student@example.com)    | string
+        %%      | student_name (e.g. Alice Brown)    | string
+        student_id string PK
+        student_email string
+        student_name string
+    }
+    COURSE {
+        %% Columns: PK/FK | Field (example) | Type (example)
+        %% PK   | course_id (e.g. courseId)    | string
+        %%      | course_code (e.g. MATH101)    | string
+        %%      | course_name (e.g. Mathematics)    | string
+        %%      | course_schedule (e.g. Mon-Wed-Fri 9am)    | string
+        %%      | course_location (e.g. Room 101)    | string
+        %% FK   | teacher_id (e.g. teacherId)    | string
+        course_id string PK
+        course_code string
+        course_name string
+        course_schedule string
+        course_location string
+        teacher_id string FK
+    }
+    ENROLLMENT {
+        %% Columns: PK/FK | Field (example) | Type (example)
+        %% FK   | student_id (e.g. studentId)    | string
+        %% FK   | course_id (e.g. courseId)    | string
+        student_id string FK
+        course_id string FK
+    }
+
+    TEACHER ||--o{ COURSE : teaches
+    COURSE ||--o{ ENROLLMENT : has
+    STUDENT ||--o{ ENROLLMENT : enrolls
+    STUDENT }o--o{ COURSE : "enrolled_in"
+```
