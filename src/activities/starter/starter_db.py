@@ -3,8 +3,11 @@ from importlib import resources
 import pandas as pd
 
 from activities import data
+from activities import starter
 
+from pathlib import Path
 
+import sqlite3
 def read_data_to_df(data_path):
     """ Reads the data from Excel into two dataframes and returns these
 
@@ -82,12 +85,25 @@ def describe(games_df, codes_df):
     print("\nUnique values of disabilities_included\n", disability_category_list)
     print("\nFull contents of the games sheet\n\n", games_df)
 
+def create_db(sql_script_path, db_path):
+   connection = sqlite3.connect(db_path)
+   cursor = connection.cursor()
+   # Read the SQL script content from file
+   with open(sql_script_path, 'r') as file:
+        sql_script = file.read()
+   cursor.executescript(sql_script)
+   connection.commit()
+   connection.close()
 
 def main():
     """ Included to give an example of how to use the methods """
     path_para_raw = resources.files(data).joinpath("paralympics_all_raw.xlsx")
     df_games, df_codes = read_data_to_df(path_para_raw)
     describe(df_games, df_codes)
+    sql_script_path = Path(__file__).parent.joinpath("paralympics_schema_starter.sql")
+    db_path = Path(__file__).parent.joinpath("para_my_disa.db")
+    create_db(sql_script_path, db_path)
+    
 
 
 if __name__ == '__main__':

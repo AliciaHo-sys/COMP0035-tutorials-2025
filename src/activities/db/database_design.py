@@ -1,9 +1,12 @@
 from importlib import resources
 
+from pathlib import Path
+
 import pandas as pd
 
-from activities import data
 
+
+import sqlite3
 
 def read_data_to_df(data_path):
     """ Reads the data from Excel into two dataframes and returns these
@@ -118,18 +121,52 @@ def add(games_df):
     host_df = pd.DataFrame({'hostId': host_Id, 'host': host})
     #print("\nDataframe with new gamesId column added:\n", games_df)
     return games_df, disability_df, country_df, host_df
-    
 
+""" 
+def create_db(sql_script_path, db_path):
+    
+    Creates a new SQLite database using the provided SQL script.
+
+    Args:
+        sql_script_path (Path): Path to the SQL script file
+        db_path (Path): Path where the database should be created
+    
+    try:
+        # Read the SQL script content
+        with open(sql_script_path, 'r') as sql_file:
+            sql_script = sql_file.read()
+
+        # Create and execute the database
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
+        cursor.executescript(sql_script)
+        connection.commit()
+
+    except sqlite3.OperationalError as e:
+        print(f"SQLite error: {e}")
+        raise
+    except FileNotFoundError:
+        print(f"SQL script file not found at: {sql_script_path}")
+        raise
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        raise
+    finally:
+        if 'connection' in locals():
+            connection.close()
+"""
 
 
 
 def main():
     """ Included to give an example of how to use the methods """
-    path_para_raw = resources.files(data).joinpath("paralympics_all_raw.xlsx")
+    path_para_raw = Path(__file__).parent.parent.joinpath("data", "paralympics_all_raw.xlsx")
     
     df_games, df_codes = read_data_to_df(path_para_raw)
+    sql_path = Path(__file__).parent.parent.joinpath("starter", "student_schema.sql")
+    #create_db(sql_path, db_path)
     #describe(df_games, df_codes)
-    add(df_games)
+    print(add(df_games))
 
 
 if __name__ == '__main__':

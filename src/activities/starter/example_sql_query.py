@@ -26,12 +26,34 @@ def sample_select_queries(db_path):
     for row in rows:
         print(row)
 
+    # Select all rows and columns from the student table
+    cur.execute('SELECT * FROM course')
+    rows = cur.fetchall()  # Fetches more than 1 row
+    print("\nAll rows and columns from the course table\n")
+    for row in rows:
+        print(row)
+
+    # Select the student_id column
+    cur.execute('SELECT course_code FROM course WHERE course_name="Chemistry"')
+    row = cur.fetchone()  # Fetches the first result
+    print("\nSelect the course_code: \n", row[0])
+
+    cur.execute('SELECT course_code FROM course WHERE course_schedule LIKE "%Mon%"')
+    rows = cur.fetchall()  # Fetches all rows from the result
+    print("\nTeacher name and email where the teacher is id 1 or 2\n")
+    for row in rows:
+        print(row[0])
+       
+
     con.close()
+
+
 
 
 def main():
     db_path = resources.files(data).joinpath("sample.db")
     sample_select_queries(db_path)
+    
 
 
 if __name__ == "__main__":
