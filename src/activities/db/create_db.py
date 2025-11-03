@@ -17,16 +17,6 @@ def create_db(sql_path, db_path):
     connection.commit()  # Commit the changes
     connection.close()  # Close the connection
 
-def delete_rows(db_path):
-    conn = sqlite3.connect(db_path)
-    cur = conn.cursor()
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
-    table_names = [row[0] for row in cur.fetchall()]
-    for table_name in table_names:
-      
-        cur.execute(f"DELETE FROM {table_name}")
-    conn.commit()
-    conn.close()
 
 def insert_db(db_path):
         # Use a single connection and cursor
@@ -87,7 +77,7 @@ def main():
     sql_path = Path(__file__).parent.parent.joinpath("starter", "student_schema.sql")
     db = Path(__file__).parent.parent.joinpath("data", "sample.db")
     #create_db(sql_path, db)
-    delete_rows(db)
+    #delete_rows(db)
     insert_db(db)
 
 if __name__ == "__main__":

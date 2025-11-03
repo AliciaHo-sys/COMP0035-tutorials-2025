@@ -102,6 +102,8 @@ def main():
     describe(df_games, df_codes)
     sql_script_path = Path(__file__).parent.joinpath("paralympics_schema_starter.sql")
     db_path = Path(__file__).parent.joinpath("para_my_disa.db")
+    if db_path.exists():
+        db_path.unlink()  # Deletes the old database file
     create_db(sql_script_path, db_path)
     
 

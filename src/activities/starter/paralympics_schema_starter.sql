@@ -55,11 +55,12 @@ erDiagram
     }
 */
 PRAGMA foreign_keys = ON;
-CREATE TABLe games
+
+CREATE TABLE  games
 (
     id INTEGER PRIMARY KEY,
-    type TEXT, CHECK (type IN ('winter', 'summer')),
-    year INTEGER, CHECK (year BETWEEN 1960 AND 9999),
+    type TEXT CHECK (type IN ('winter', 'summer')),
+    event_year INTEGER CHECK (event_year BETWEEN 1960 AND 9999),
     start TEXT,
     end TEXT,
     countries INTEGER,
@@ -71,30 +72,38 @@ CREATE TABLe games
     highlights TEXT,
     URL TEXT
 );
+
+
+
 CREATE TABLE country
 (
     id INTEGER PRIMARY KEY,
     country TEXT NOT NULL
 );
+
+
 /*
  Disability {
         int id PK
         string description
     }
  */
-CREATE TABLE disability (
 
+CREATE TABLE disability (
+    id INTEGER PRIMARY KEY,
+    description TEXT
 );
 -- Team completed to show the FK syntax
+
 CREATE TABLE team
 (
     code TEXT PRIMARY KEY,
     name TEXT NOT NULL,
-    region TEXT, CHECK (region IN ('Asia', 'Europe', 'Africa', 'America', 'Oceania')),
+    region TEXT CHECK (region IN ('Asia', 'Europe', 'Africa', 'America', 'Oceania')),
     sub_region TEXT,
-    member_type TEXT, CHECK (member_type IN ('country', 'team', 'dissolved', 'construct')),
+    member_type TEXT CHECK (member_type IN ('country', 'team', 'dissolved', 'construct')),
     notes TEXT,
-    country_id INTEGER, FOREIGN KEY (country_id) REFERENCES Country (id) ON UPDATE CASCADE ON DELETE SET NULL
+    country_id INTEGER, FOREIGN KEY (country_id) REFERENCES country (id) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 /*  Host {
@@ -105,8 +114,12 @@ CREATE TABLE team
 
  */
 
-CREATE TABLE host (
 
+CREATE TABLE host (
+    id INTEGER PRIMARY KEY,
+    place_name TEXT,
+    country_id INTEGER, 
+    FOREIGN KEY(country_id) REFERENCES country (id) ON UPDATE CASCADE ON DELETE SET NULL 
 );
 
 /*
@@ -116,8 +129,13 @@ CREATE TABLE host (
         str team_code FK "ON UPDATE CASCADE ON DELETE CASCADE"
     }
 */
-CREATE TABLE gamesteam (
 
+CREATE TABLE gamesteam (
+    id INTEGER PRIMARY KEY,
+    games_id INTEGER,
+    team_code TEXT, 
+    FOREIGN KEY(games_id) REFERENCES games (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(team_code) REFERENCES team(code) ON UPDATE CASCADE ON DELETE CASCADE
 );
 /*
     GamesDisability {
@@ -126,8 +144,13 @@ CREATE TABLE gamesteam (
         int disability_id FK "ON UPDATE CASCADE ON DELETE CASCADE"
     }
 */
-CREATE TABLE gamesdisability (
 
+CREATE TABLE gamesdisability (
+    id INTEGER PRIMARY KEY,
+    games_id INTEGER, 
+    disability_id INTEGER, 
+    FOREIGN KEY(games_id) REFERENCES games (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(disability_id) REFERENCES disability (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 /*
     GamesHost {
@@ -136,6 +159,12 @@ CREATE TABLE gamesdisability (
         int host_id FK "ON UPDATE CASCADE ON DELETE CASCADE"
     }
 */
+
 CREATE TABLE gameshost (
+    id INTEGER PRIMARY KEY,
+    games_id INTEGER, 
+    host_id INTEGER, 
+    FOREIGN KEY(games_id) REFERENCES games (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(host_id) REFERENCES host (id) ON UPDATE CASCADE ON DELETE CASCADE
 
 );
