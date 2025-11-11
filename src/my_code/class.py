@@ -1,3 +1,9 @@
+from dataclasses import dataclass
+from datetime import date
+from typing import List
+
+
+
 class ParalympicEvent:
     """ Represents a Paralympic event
 
@@ -32,18 +38,22 @@ class ParalympicEvent:
             athlete_name: A string representing the name of the athlete
         """
         self.athletes.append(athlete_name)
+         
+
 
 class Athlete:
-    def __init__(self, name, team, disa_classification):
-        self.name = name
-        self.team = team
-        self.dis_classification = disa_classification
-        self.athletes = []
+    def __init__(self, first_name: str, last_name: str, team_code: str, disability_class: str, medals: List[Medal]):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.team_code = team_code
+        self.disability_class = disability_class
+        self.medals = medals  # Composition: Athlete has Medals
 
     def __str__(self):
         """ Describes the event """
-        return f"{self.name} is of {self.team} team for classification {self.dis_classification}."
+        return f"{self.first_name} {self.last_name} is of {self.team_code} team for has {self.medals}."
         
+
 
     
 
@@ -58,8 +68,21 @@ def main():
     event.register_athlete("Sungjoon Jung")  # should register the athlete
     event.describe()  # Should print the event again, "Athletes competing" should include Sungjoon Jung
     """
-    athlete = Athlete("Alicia", "HK", "blindness")
-    print(str(athlete))
+    #athlete = Athlete("Alicia", "HK", "blindness")
+    #print(str(athlete))
+    # Create medals
+    medal1 = Medal("gold", "Paris 2024 design", date(2023, 7, 1))
+    medal2 = Medal("silver", "Tokyo 2020 design", date(2019, 8, 25))
+
+    # Create an athlete with medals
+    athlete = Athlete(
+        first_name="Wei",
+        last_name="Wang",
+        team_code="CHN",
+        disability_class="T54",
+        medals=[medal1, medal2]
+    )
+    print(athlete)
        
 
 
