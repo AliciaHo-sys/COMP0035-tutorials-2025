@@ -40,19 +40,28 @@ class ParalympicEvent:
         self.athletes.append(athlete_name)
          
 
+# Base class
+@dataclass
+class Medals:
+    type: str
+    design: str
+    date_designed: date
 
+
+
+# Subclass
 class Athlete:
-    def __init__(self, first_name: str, last_name: str, team_code: str, disability_class: str, medals: List[Medal]):
+
+    def __init__(self, first_name: str, last_name: str, team_code: str, disability_class: str, medals: List[Medals]):
         self.first_name = first_name
         self.last_name = last_name
         self.team_code = team_code
         self.disability_class = disability_class
-        self.medals = medals  # Composition: Athlete has Medals
+        self.medals = medals # Composition: Athlete has Medals
 
     def __str__(self):
         """ Describes the event """
-        return f"{self.first_name} {self.last_name} is of {self.team_code} team for has {self.medals}."
-        
+        return f"{self.first_name} {self.last_name} is of {self.team_code} team has {self.medals}."
 
 
     
@@ -71,10 +80,11 @@ def main():
     #athlete = Athlete("Alicia", "HK", "blindness")
     #print(str(athlete))
     # Create medals
-    medal1 = Medal("gold", "Paris 2024 design", date(2023, 7, 1))
-    medal2 = Medal("silver", "Tokyo 2020 design", date(2019, 8, 25))
+    medal1 = Medals( "gold", "Paris 2024 design", date(2023, 7, 1))
+    medal2 = Medals("silver",  "Tokyo 2020 design", date(2019, 8, 25))
 
     # Create an athlete with medals
+    
     athlete = Athlete(
         first_name="Wei",
         last_name="Wang",
@@ -82,9 +92,11 @@ def main():
         disability_class="T54",
         medals=[medal1, medal2]
     )
+   
     print(athlete)
+    #print(medal1)
        
-
+    
 
    
 if __name__ == "__main__":
