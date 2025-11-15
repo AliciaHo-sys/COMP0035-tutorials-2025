@@ -46,7 +46,7 @@ class Medals:
     type: str
     design: str
     date_designed: date
-
+    
 
 
 # Subclass
