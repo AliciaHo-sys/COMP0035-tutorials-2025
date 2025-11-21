@@ -107,11 +107,12 @@ def main():
         medals=[medal1, medal2]
     )
     """
-
+    """
     try:
         bp = Athlete(first_name="Bianka", medals=1)
     except ValidationError as e:
         print(e.errors())
+    """
     
     athlete_none = Athlete(
         first_name="Alicia",
@@ -131,14 +132,16 @@ def main():
     
     for i in range (6):
         athlete_none.medals.append(medal1) 
+    print(athlete_none)
 
     for i in range (5):
         athlete_none_1.medals.append(medal2)
-    # athlete_none_1.medals.append(medal3)
+    print(athlete_none_1)
+    athlete_none_1.medals.append(medal3)
     
     #Catherine Debrunner from ITA Italy won 5 gold and 1 bronze
     #print(athlete)
-    #print(athlete_none_1)
+    
     #print(medal1)
        
     
