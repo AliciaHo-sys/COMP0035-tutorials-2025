@@ -4,6 +4,8 @@ from sqlmodel import Field, SQLModel, Column, Relationship, create_engine
 
 from sqlalchemy import CheckConstraint, ForeignKey
 
+from typing import Optional
+
 """
 class Games(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -20,10 +22,12 @@ class Games(SQLModel, table=True):
     highlights: str
     URL: str
 """
-
+# Optional[str/int] value may be either a str/int or None
 class Country(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     country: str 
+    teams: list["Team"] = Relationship(back_populates="country")
+
 
 class Disability(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -32,19 +36,18 @@ class Disability(SQLModel, table=True):
 class Team(SQLModel, table=True):
     code: str | None = Field(default=None, primary_key=True)
     name: str 
-    region: str = Field(
+    region: Optional[str] = Field(
         sa_column=Column("region", CheckConstraint
                          ("region IN ('Asia', 'Europe', 'Africa', 'America', 'Oceania')"))
-                        )
-    sub_region: str 
-    member_type: str = Field(sa_column=Column("member_type", CheckConstraint
-                                              ("member_type IN ('country', 'team', 'dissolved', 'construct)"))
+        )
+    sub_region: Optional[str]
+    member_type: Optional[str] = Field(sa_column=Column("member_type", CheckConstraint
+                                              ("member_type IN ('country', 'team', 'dissolved', 'construct')"))
                             )
-    notes: str 
-    country_id: int = Field(sa_column= ForeignKey("country.id", onupdate = "CASCADE", ondelete = "NULL"))
+    notes: Optional[str] 
+    country_id: Optional[int] = Field(
+        default= None, 
+        sa_column= Column (ForeignKey("country.id", onupdate = "CASCADE", ondelete = "SET NULL"))
+        )
     country: "Country" = Relationship(back_populates="teams")
 
-engine = create_engine("sqlite:///paralympics_sqlmodel.db")
-
-# 3. Create all the tables in the database
-SQLModel.metadata.create_all(engine)

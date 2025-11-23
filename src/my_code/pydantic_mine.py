@@ -107,12 +107,12 @@ def main():
         medals=[medal1, medal2]
     )
     """
-    """
+    
     try:
         bp = Athlete(first_name="Bianka", medals=1)
     except ValidationError as e:
-        print(e.errors())
-    """
+        print("this is an error", e.errors())
+    
     
     athlete_none = Athlete(
         first_name="Alicia",
