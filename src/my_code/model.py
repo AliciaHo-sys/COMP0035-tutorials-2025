@@ -1,8 +1,10 @@
 from datetime import date
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Column, Relationship, create_engine
 
+from sqlalchemy import CheckConstraint, ForeignKey
 
+"""
 class Games(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     type: str = Field()
@@ -17,20 +19,32 @@ class Games(SQLModel, table=True):
     participants: int
     highlights: str
     URL: str
+"""
 
-class country(SQLModel, table=True):
+class Country(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    country: str = Field()
+    country: str 
 
-class disability(SQLModel, table=True):
+class Disability(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    description: str = Field()
+    description: str 
 
 class Team(SQLModel, table=True):
     code: str | None = Field(default=None, primary_key=True)
-    name: str = Field()
-    region: str = Field()
-    sub_region: str = Field()
-    member_type: str = Field()
-    notes: str = Field()
-    country_id: int = Field(foreign_key="country.id")
+    name: str 
+    region: str = Field(
+        sa_column=Column("region", CheckConstraint
+                         ("region IN ('Asia', 'Europe', 'Africa', 'America', 'Oceania')"))
+                        )
+    sub_region: str 
+    member_type: str = Field(sa_column=Column("member_type", CheckConstraint
+                                              ("member_type IN ('country', 'team', 'dissolved', 'construct)"))
+                            )
+    notes: str 
+    country_id: int = Field(sa_column= ForeignKey("country.id", onupdate = "CASCADE", ondelete = "NULL"))
+    country: "Country" = Relationship(back_populates="teams")
+
+engine = create_engine("sqlite:///paralympics_sqlmodel.db")
+
+# 3. Create all the tables in the database
+SQLModel.metadata.create_all(engine)
