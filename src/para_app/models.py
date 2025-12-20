@@ -15,7 +15,17 @@ class GamesHost(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     games_id: int = Field(default=None, foreign_key="games.id")
     host_id: int = Field(default=None, foreign_key="host.id")
-
+"""
+    def __init__(self, games_id:int, host_id:int):
+        self.games_id = games_id
+        self.host_id = host_id
+    
+    def __str__(self) -> str:
+        return f"{self.host_id} hosted at {self.games_id}"
+    
+    def __repr__(self) -> str:
+        return f"GamesHost(games_id={self.games_id}, host_id={self.host_id})"
+"""
 
 class GamesDisability(SQLModel, table=True):
     __tablename__ = "games_disability"
@@ -163,7 +173,6 @@ class Team(SQLModel, table=True):
     def __str__(self) -> str:
         return f"{self.code} {self.name} is in {self.region} and is a {self.member_type}."
 
-
 class Disability(SQLModel, table=True):
     __tablename__ = "disability"
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -185,3 +194,7 @@ class Country(SQLModel, table=True):
     __tablename__ = "country"
     id: Optional[int] = Field(default=None, primary_key=True)
     country_name: str
+
+
+
+  

@@ -36,6 +36,28 @@ class ParalympicEvent:
             athlete_name: A string representing the name of the athlete
         """
         self.athletes.append(athlete_name)
+    
+
+    def __str__(self):
+        """User-friendly string representation"""
+        return (f"{self.name} ({self.sport}, Class {self.classification}) with {len(self.athletes)} athlete(s)"
+                f"{self.athletes}")
+
+    def __repr__(self):
+        """Unambiguous representation for debugging"""
+        return (f"ParalympicEvent(name='{self.name}', sport={self.sport}, "
+                f"classification={self.classification}, athletes={self.athletes})")
+  
+
+    @classmethod
+    def from_dict(cls, data):
+        """Creates an event from a dictionary"""
+        return cls(data['name'], data['sport'], data['classification'])
+
+    @staticmethod
+    def is_valid_classification(classification):
+        """Checks if the classification is within a valid range"""
+        return 1 <= classification <= 10
 
 
 @dataclass
@@ -73,19 +95,35 @@ class Athlete:
         self.team_code = team_code
         self.disability_class = disability_class
 
-    def __str__(self):
-        """ Returns a string representation of the athlete.
+    
+    
+    def __len__(self):
+        """ Returns the length of the athlete's full name.
 
             Returns:
-                str: A string containing the athlete's full name, team code, and disability class.
+                int: The length of the athlete's full name.
         """
-        return f"{self.first_name} {self.last_name} {self.team_code} {self.disability_class}"
+        return len(f"{self.first_name} {self.last_name}")
 
     def introduce(self):
         """
                 Prints an introduction of the athlete, including their name, team, and disability class.
                 """
         print(f"{self.first_name} {self.last_name} represents {self.team_code} in class {self.disability_class}.")
+
+    def __str__(self):
+        """ Returns a string representation of the athlete.
+
+            Returns:
+                str: A string containing the athlete's full name, team code, and disability class.
+        """
+       
+        return f"{self.first_name} {self.last_name} {self.team_code} {self.disability_class}"
+    
+    def __repr__(self):
+        """Unambiguous representation for debugging"""
+        return (f"ParalympicEvent(first_name='{self.first_name}', last_name='{self.last_name}'," 
+                f" team_code='{self.team_code}', disability_class='{self.disability_class}'))")
 
 
 class Runner(Athlete):
@@ -135,7 +173,6 @@ def main():
     event.describe()  # Should print the event description, "Athletes competing" will be empty
     event.register_athlete("Sungjoon Jung")  # should register the athlete
     event.describe()  # Should print the event again, "Athletes competing" should include Sungjoon Jung
-    """
     #athlete = Athlete("Alicia", "HK", "blindness")
     #print(str(athlete))
     # Create medals
@@ -154,7 +191,19 @@ def main():
    
     print(athlete)
     #print(medal1)
-       
+    
+    """
+    
+
+    ev = ParalympicEvent(name="Boccia Pairs", sport="Boccia", classification="BC4")
+    ev.register_athlete(athlete_name="Alison Levine")
+    repr(ev)
+    print(ev)
+    ev_1 = Athlete(first_name="John", last_name="doe", team_code="USA", disability_class="T12")
+    repr(ev_1)
+    print(ev_1)
+    print(len(ev_1))
+        
     
 
    

@@ -1,0 +1,18 @@
+C4Context
+    title System Context diagram for Paralympics Quiz Web App
+    Person(AppUserA, "F1 teams")
+    
+    SystemDb_Ext(SystemC, "F1.org system")
+
+    Boundary(b0, "Analyser App boundary", "") {
+        System(SystemA, "F1 Analyser App")
+        SystemDb(SystemB, "F1 result Database")
+    }
+
+    BiRel(SystemB, SystemA, "Analyse from, write to.")
+    
+    Rel(AppUserA, SystemA, "View and search. Save outputs")
+    Rel(SystemC, SystemB, "New data.")
+    UpdateRelStyle(AppUserA, SystemA, $offsetX="-150", $offsetY="-70")
+    UpdateRelStyle(SystemB, SystemA, $offsetX="-50", $offsetY="30")
+
