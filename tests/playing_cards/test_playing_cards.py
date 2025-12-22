@@ -7,7 +7,6 @@ from sqlmodel import Session, select
 
 from activities.starter.playing_cards import CardModel, Deck, Rank, Suit, create_cards_db
 
-
 def test_suit_returns_suitstring():
     """ Test that the suit returns the correct suit and datatype
 
@@ -28,7 +27,7 @@ def test_suit_returns_suitstring():
     assert type(result) == str
 
 
-def test_deal_hand_return_amount():
+def test_deal_hand_return_amount(deck_cards):
     """ Test that the deal hand returns the correct amount of cards
 
     GIVEN a deck object
@@ -36,20 +35,18 @@ def test_deal_hand_return_amount():
     THEN it should return the amount of cards specified
     """
     # Arrange
-    suit_values = [Suit(suit=s) for s in ['Clubs', 'Diamonds', 'Hearts', 'Spades']]
-    rank_values = [Rank(rank=str(r)) for r in [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace']]
-    deck_cards = Deck(suits=suit_values, ranks=rank_values)
+    
     hand_size = 7
 
     # Act
-    hand = deck_cards.deal_hand(hand_size)
+    hand = deck_cards.deck.deal_hand(hand_size)
 
     # Assert
     print(hand)
     assert len(hand) == hand_size
 
 
-def test_deck_cards_count():
+def test_deck_cards_count(deck_cards):
     """ Test that the deck cards count returns the correct number of cards
 
     This test is not strictly a unit test as it relies on the Suit and Rank classes
@@ -59,11 +56,7 @@ def test_deck_cards_count():
     THEN the result should be 52 cards
     """
 
-    # Arrange: create an instance of a deck
-    suit_values = [Suit(suit=s) for s in ['Clubs', 'Diamonds', 'Hearts', 'Spades']]
-    rank_values = [Rank(rank=str(r)) for r in [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace']]
-    deck_cards = Deck(suits=suit_values, ranks=rank_values)
-
+    
     # Act: Find the length of deck_cards.deck
     count = len(deck_cards.deck)
 
@@ -113,7 +106,7 @@ def test_create_cards_db_raises_on_invalid_path():
         assert isinstance(e, OperationalError)
 
 
-def test_select_returns_cards():
+def test_select_returns_cards(session):
     """ Test that database returns results when the cards table is queried
 
     Not a unit test!
@@ -122,12 +115,24 @@ def test_select_returns_cards():
     WHEN a query is made to the cards table
     THEN it should return a result set with 52 rows
     """
-    db_path = ":memory:"
-    engine = create_cards_db(db_path=db_path)
+   
+    cards = session.exec("SELECT * FROM card").all()
+    
+    assert len(cards) == 52
+
+    # test_something.py
+
+
+"""
+def test_cards_exist(session):
+    cards = session.exec("SELECT * FROM card").all()
+    assert len(cards) == 52
     with Session(engine) as session:
         statement = select(CardModel)
         result = session.exec(statement)
         cards = result.all()
         assert len(cards) == 52
+    
+    """
 
 
