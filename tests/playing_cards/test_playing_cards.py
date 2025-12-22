@@ -65,9 +65,33 @@ def test_deck_cards_count():
     deck_cards = Deck(suits=suit_values, ranks=rank_values)
 
     # Act: Find the length of deck_cards.deck
+    count = len(deck_cards.deck)
 
     # Assert: Assert the length is 52
-    pass  # Remove this line once you add your assertion!
+    print(count)
+    assert count == 52
+
+
+def test_suit_card():
+    
+    """ 
+    Test that a card has the correct suit associated with it
+    
+    GIVEN a card object
+    WHEN the suit of the card is accessed
+    THEN it should return the correct suit string
+    """
+
+    #Arrange
+    suit_value = Suit(suit = "Diamonds")
+    rank_value = Rank(rank= "Ace")
+    card = CardModel(suit=suit_value, rank=rank_value)
+
+    #Act
+    card_suit = card.suit
+
+    #Assert
+    assert card_suit == suit_value
 
 
 def test_create_cards_db_raises_on_invalid_path():
@@ -82,7 +106,11 @@ def test_create_cards_db_raises_on_invalid_path():
     invalid_path = "/data"
 
     # Add test assertion here
-    pass  # Remove this line once you add your assertion!
+    try:
+        create_cards_db(db_path=invalid_path)
+    except Exception as e:
+        from sqlalchemy.exc import OperationalError
+        assert isinstance(e, OperationalError)
 
 
 def test_select_returns_cards():
@@ -101,4 +129,5 @@ def test_select_returns_cards():
         result = session.exec(statement)
         cards = result.all()
         assert len(cards) == 52
+
 

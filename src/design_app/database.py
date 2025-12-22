@@ -8,18 +8,19 @@ Note:
     """
 from importlib import resources
 
-from sqlmodel import SQLModel, create_engine, text
+from sqlmodel import SQLModel, create_engine, text,Session, select
 import pandas as pd
 from activities import data
 from design_app import models
 from design_app.models import *
-from sqlmodel import Session
+
 
 student_db = resources.files(models).joinpath("students.sqlite")
 sqlite_url = f"sqlite:///{str(student_db)}"
 # echo=True means the SQL executed by SQLModel will be output to the terminal when the code is run.
 # This can be useful for debugging.
 engine = create_engine(sqlite_url, echo=True)
+
 
 
 def create_db_and_tables():
@@ -70,6 +71,8 @@ def add_all_data(data_path: str):
         session.add_all(course_objects)
         session.commit()
 
+        
+
         # Create and add the enrollment objects and add the location FK to the courses
         for _, row in df.iterrows():
             # Find the ids of the rows
@@ -83,15 +86,41 @@ def add_all_data(data_path: str):
             enrollment = Enrollment(student_id=s_id, course_id=c_id, teacher_id=t_id)
             session.add_all([course, enrollment])
             session.commit()
+        """
+        statement = select(Student).join(Enrollment).join(Course).where(Course.course_name == "Physics")
+        wanted_students = session.exec(statement).all()
+        print(wanted_students)
+
+        statement = select(Course).join(Enrollment).join(Student).where(Student.id == 1)
+        wanted_students = session.exec(statement).all()
+        print(wanted_students)
+    
+        wanted_teacher = session.exec(select(Teacher).where(Teacher.teacher_name == "Mark Taylor")).first()
+        names = session.exec(select(Student.student_name)).all()
+        print(names)
+        print("\n now", wanted_teacher)
+        """
+        
 
 
 def main():
-    teacher = Teacher(teacher_name="Ani Sarana", teacher_email="as@school.com")
+    # 3. Drop all tables (metadata now knows about Hero)
+    SQLModel.metadata.drop_all(engine)
+
+    # 4. Recreate tables if needed
+    SQLModel.metadata.create_all(engine)
     data_path = resources.files(data).joinpath("student_data.csv")
+    
     add_all_data(data_path)
+    
+    
+    """
+    teacher = Teacher(teacher_name="Ani Sarana", teacher_email="as@school.com")
     with Session(engine) as session:
         session.add(teacher)
         session.commit()
+    
+    """
 
 if __name__ == "__main__":
     main()
