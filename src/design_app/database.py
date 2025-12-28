@@ -7,7 +7,6 @@ Note:
 
     """
 from importlib import resources
-
 from sqlmodel import SQLModel, create_engine, text,Session, select
 import pandas as pd
 from activities import data
