@@ -20,6 +20,7 @@ from sqlmodel import select
 
 
 
+
 def test_suit_returns_suitstring():
     """ Test that the suit returns the correct suit and datatype
 
@@ -80,7 +81,7 @@ def test_deal_hand_return_amount_fixture(deck_cards):
     assert len(hand) == hand_size
 
 
-def test_deck_cards_count():
+def test_deck_cards_count(deck_cards):
     """ Test that the deck cards count returns the correct number of cards
 
     This test is not strictly a unit test as it relies on the Suit and Rank classes
@@ -91,10 +92,8 @@ def test_deck_cards_count():
     """
 
     # Arrange: create an instance of a deck
-    suit_values = [Suit(suit=s) for s in ['Clubs', 'Diamonds', 'Hearts', 'Spades']]
-    rank_values = [Rank(rank=str(r)) for r in
-                   [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace']]
-    deck_cards = Deck(suits=suit_values, ranks=rank_values)
+   
+    
 
     # Act
     deck_length = len(deck_cards.deck)
